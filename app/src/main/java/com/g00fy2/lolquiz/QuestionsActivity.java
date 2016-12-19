@@ -47,6 +47,7 @@ public class QuestionsActivity extends AppCompatActivity {
     private int colorWrong;
     private int cardsDefault;
     private boolean answerSet;
+    private ChampionsDataSource opendata;
     private AlphaAnimation blinkAnimation;
 
 
@@ -126,8 +127,13 @@ public class QuestionsActivity extends AppCompatActivity {
     private void setNewRound() {
         if (quizRound <= 10) {
             answerSet = false;
+            qaSet = null;
 
-            if (quizRound != 1) {
+            if (quizRound == 1) {
+                // initialize new DataSource class
+                opendata = new ChampionsDataSource(getApplicationContext());
+            }
+            else {
                 getSupportActionBar().setTitle("Round " + Integer.toString(quizRound));
 
                 //animation for round progressbar (1-10) multiplied by 1000 for smoother animation
@@ -136,10 +142,8 @@ public class QuestionsActivity extends AppCompatActivity {
                 roundProgress.startAnimation(anim);
             }
 
-            // Opens new DataSource class and generates new QASet
-            ChampionsDataSource opendata = new ChampionsDataSource(getApplicationContext());
+            // generates new QASet
             opendata.openReadable();
-            qaSet = null;
             try {
                 qaSet = opendata.getRandomQASet();
             } catch (ApiException e) {
