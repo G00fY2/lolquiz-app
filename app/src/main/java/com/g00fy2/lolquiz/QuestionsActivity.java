@@ -167,6 +167,7 @@ public class QuestionsActivity extends AppCompatActivity {
             Builder builder = new Builder(this)
                     .setTitle("Game finished!")
                     .setMessage(Integer.toString(rightAnswers) + " from 10 answers were right!")
+                    .setCancelable(false)
                     .setPositiveButton("OK", new OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
