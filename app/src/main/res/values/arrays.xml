@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_example_list_titles">test</string-array>
+    <string-array name="pref_example_list_values">test</string-array>
+</resources>

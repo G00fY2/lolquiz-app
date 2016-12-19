@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="My category">
+        <SwitchPreference
+            android:key="check_1"
+            android:summary="Check or not, that is the question"
+            android:title="Checkbox Preference 1"/>
+        <EditTextPreference
+            android:key="edit_1"
+            android:summary="Input some text here"
+            android:title="EditText Preference 1"/>
+    </PreferenceCategory>
+</PreferenceScreen>

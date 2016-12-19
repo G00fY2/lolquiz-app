@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical"
+              tools:context="com.g00fy2.lolquiz.QuestionsActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/question_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolbarStyle"
+            app:titleTextColor="@android:color/white"/>
+
+        <ProgressBar
+            android:id="@+id/question_progressbar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:indeterminate="false"
+            android:max="10000"
+            android:maxHeight="6dp"
+            android:minHeight="6dp"
+            android:progress="0"
+            android:visibility="visible"/>
+
+        <FrameLayout
+            android:id="@+id/toolbar_frame"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/question"
+                android:textColor="@android:color/white"
+                android:textSize="30dp"/>
+        </FrameLayout>
+
+        <ProgressBar
+            android:id="@+id/question_countdown"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:indeterminate="false"
+            android:max="10000"
+            android:maxHeight="6dp"
+            android:minHeight="6dp"
+            android:progress="10000"
+            android:visibility="visible"/>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.g00fy2.lolquiz.QuestionsActivity">
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_answer1"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="submit_answer"
+            app:cardUseCompatPadding="true"
+            card_view:cardBackgroundColor="@color/CardDefault"
+            card_view:cardCornerRadius="4dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/answer1_image"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:scaleType="fitStart"
+                    app:srcCompat="@mipmap/ic_launcher"/>
+
+                <TextView
+                    android:id="@+id/answer1_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="92dp"
+                    android:gravity="left|center"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text="@string/answer1"
+                    android:textSize="20sp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_answer2"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="submit_answer"
+            app:cardUseCompatPadding="true"
+            card_view:cardBackgroundColor="@color/CardDefault"
+            card_view:cardCornerRadius="4dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/answer2_image"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_alignParentLeft="true"
+                    android:scaleType="fitStart"
+                    app:srcCompat="@mipmap/ic_launcher"/>
+
+                <TextView
+                    android:id="@+id/answer2_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="92dp"
+                    android:gravity="left|center"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text="@string/answer2"
+                    android:textSize="20sp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_answer3"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="submit_answer"
+            app:cardUseCompatPadding="true"
+            card_view:cardBackgroundColor="@color/CardDefault"
+            card_view:cardCornerRadius="4dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/answer3_image"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_alignParentLeft="true"
+                    android:scaleType="fitStart"
+                    app:srcCompat="@mipmap/ic_launcher"/>
+
+                <TextView
+                    android:id="@+id/answer3_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="92dp"
+                    android:gravity="left|center"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text="@string/answer3"
+                    android:textSize="20sp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_answer4"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="submit_answer"
+            app:cardUseCompatPadding="true"
+            card_view:cardBackgroundColor="@color/CardDefault"
+            card_view:cardCornerRadius="4dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp">
+
+                <ImageView
+                    android:id="@+id/answer4_image"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_alignParentLeft="true"
+                    android:scaleType="fitStart"
+                    app:srcCompat="@mipmap/ic_launcher"/>
+
+                <TextView
+                    android:id="@+id/answer4_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="92dp"
+                    android:gravity="left|center"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text="@string/answer4"
+                    android:textSize="20sp"/>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+</LinearLayout>
