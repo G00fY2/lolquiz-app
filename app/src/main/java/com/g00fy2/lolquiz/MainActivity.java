@@ -103,10 +103,11 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        boolean catchImages = true;
 
         if (isConnected) {
             try {
-                new StaticDataChampion(apiValues, this, getApplicationContext()).execute();
+                new StaticDataChampion(apiValues, this, catchImages, getApplicationContext()).execute();
             } catch (ApiException e) {
                 Toast.makeText(getApplicationContext(), "Internal error", Toast.LENGTH_SHORT).show();
             }
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
 
         if (isConnected) {
             try {
-                StaticDataChampion champApi = new StaticDataChampion(apiValues, this, getApplicationContext());
+                StaticDataChampion champApi = new StaticDataChampion(apiValues, this, true, getApplicationContext());
                 RestApi restApi = RetroClient.getRestApi(champApi.buildStaticDataBaseUrl());
 
                 Call<ChampionListDto> call = restApi.getChampionList("true", "stats", apiValues.get("apiKey"));

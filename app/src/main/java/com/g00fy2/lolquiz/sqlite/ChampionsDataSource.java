@@ -84,8 +84,8 @@ public class ChampionsDataSource {
         return count;
     }
 
-    public Integer updateChampionImgTransaction(ChampionListDto championList) throws SQLException {
-        int count = 0;
+    public ArrayList<String> updateChampionImgTransaction(ChampionListDto championList) throws SQLException {
+        ArrayList<String> imageURLs = new ArrayList<>();
 
         db.beginTransaction();
         if (championList.data != null && !championList.data.isEmpty()) {
@@ -95,10 +95,10 @@ public class ChampionsDataSource {
                 for (Map.Entry<String, ChampionDto> entry : championList.data.entrySet()) {
                     ContentValues values = new ContentValues();
                     String imgUrl = apiUrl + entry.getValue().image.full;
+                    imageURLs.add(imgUrl);
                     values.put(MySQLiteHelper.COLUMN_IMAGEURL, imgUrl);
                     String whereClause = MySQLiteHelper.COLUMN_ID + "=" + Integer.toString(entry.getValue().id);
                     db.update(TABLE_CHAMPIONS, values, whereClause, null);
-                    count++;
                 }
                 db.setTransactionSuccessful();
             } catch (SQLException e) {
@@ -107,7 +107,7 @@ public class ChampionsDataSource {
                 db.endTransaction();
             }
         }
-        return count;
+        return imageURLs;
     }
 
     public QuestionAnswerSet getRandomQASet() throws ApiException {

@@ -11,9 +11,11 @@ import com.g00fy2.lolquiz.rest.RetroClient;
 import com.g00fy2.lolquiz.riotapi.staticdata.ChampionListDto;
 import com.g00fy2.lolquiz.riotapi.staticdata.FetchAndStoreResult;
 import com.g00fy2.lolquiz.sqlite.ChampionsDataSource;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -25,10 +27,12 @@ public class StaticDataChampion extends RiotApi {
     final static String apiCategory = "/champion";
     private FetchAndStoreCallbackInterface callbackInterface;
     private Context appContext;
+    private Boolean catchImages;
 
-    public StaticDataChampion(final Map<String, String> apiValues, FetchAndStoreCallbackInterface callbackInterface, Context appContext) throws ApiException {
+    public StaticDataChampion(final Map<String, String> apiValues, FetchAndStoreCallbackInterface callbackInterface, Boolean catchImages, Context appContext) throws ApiException {
         super(apiValues, apiVersion, apiCategory);
         this.appContext = appContext;
+        this.catchImages = catchImages;
         this.callbackInterface = callbackInterface;
     }
 
@@ -66,8 +70,16 @@ public class StaticDataChampion extends RiotApi {
                     if (imgResponse.isSuccessful()) {
                         ChampionListDto imgChampListDto = (ChampionListDto) imgResponse.body();
                         storedata.openWriteable();
-                        result.setImgDateCount(storedata.updateChampionImgTransaction(imgChampListDto));
+                        ArrayList<String> imgURLs = storedata.updateChampionImgTransaction(imgChampListDto);
+                        result.setImgDateCount(imgURLs.size());
                         storedata.close();
+                        if (catchImages) {
+                            for (String url : imgURLs) {
+                                // loading all images with picasso to utilize its caching
+                                // seems like there is no better solution atm
+                                Picasso.with(appContext).load(url).get();
+                            }
+                        }
                     } else {
                         ResponseErrorException error = new ResponseErrorException(imgResponse.code(), imgCall.request().url().toString());
                         result.setImgResponseError(error);
