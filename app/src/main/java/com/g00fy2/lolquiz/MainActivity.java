@@ -18,13 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.g00fy2.lolquiz.exception.ApiException;
-import com.g00fy2.lolquiz.rest.RestApi;
-import com.g00fy2.lolquiz.rest.RetroClient;
 import com.g00fy2.lolquiz.riotapi.FetchAndStoreCallbackInterface;
 import com.g00fy2.lolquiz.riotapi.StaticDataChampion;
-import com.g00fy2.lolquiz.riotapi.staticdata.ChampionListDto;
+import com.g00fy2.lolquiz.riotapi.StaticDataVersion;
 import com.g00fy2.lolquiz.riotapi.staticdata.FetchAndStoreResult;
-import com.g00fy2.lolquiz.sqlite.ChampionsDataSource;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -33,14 +30,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class MainActivity extends AppCompatActivity implements FetchAndStoreCallbackInterface {
 
     private Map<String, String> apiValues = new HashMap<>();
-    TextView mTestTxt;
+    private String latestVersion;
+    TextView localVersionText;
+    TextView latestVersionText;
     ImageView imageView;
 
     @Override
@@ -56,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
         //imageView = (ImageView) findViewById(R.id.randomStartImg);
         //setRandomMainWallpaper();
 
-
-        mTestTxt = (TextView) findViewById(R.id.textViewMain2);
+        localVersionText = (TextView) findViewById(R.id.textViewMain2);
+        latestVersionText = (TextView) findViewById(R.id.textViewMain4);
 
         apiValues.put("urlHost", ".api.pvp.net");
         apiValues.put("urlPath", "/api/lol/");
@@ -65,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
         apiValues.put("apiKey", "ENTER API KEY HERE");
         apiValues.put("region", "euw");
 
-        getData();
+        getLatestVersion();
+        //getData();
     }
 
     // Menu icons are inflated just as they were with actionbar
@@ -81,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.miRefresh:
-                mTestTxt.setText("");
-                getData();
+                localVersionText.setText("");
+                getLatestData();
                 return true;
             case R.id.miSettings:
                 Intent intent = new Intent(this, SettingsActivity.class);
@@ -98,16 +94,14 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
         startActivity(intent);
         //finish();
     }
-
-    private void getData() {
+    private void getLatestVersion() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        boolean catchImages = true;
 
         if (isConnected) {
             try {
-                new StaticDataChampion(apiValues, this, catchImages, getApplicationContext()).execute();
+                new StaticDataVersion(apiValues, this).execute();
             } catch (ApiException e) {
                 Toast.makeText(getApplicationContext(), "Internal error", Toast.LENGTH_SHORT).show();
             }
@@ -117,48 +111,18 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
                     //.setActionTextColor(Color.RED)
                     .show();
         }
+
     }
 
-    private void getDataRetroAsync() {
+    private void getLatestData() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        boolean catchImages = true;
 
         if (isConnected) {
             try {
-                StaticDataChampion champApi = new StaticDataChampion(apiValues, this, true, getApplicationContext());
-                RestApi restApi = RetroClient.getRestApi(champApi.buildStaticDataBaseUrl());
-
-                Call<ChampionListDto> call = restApi.getChampionList("true", "stats", apiValues.get("apiKey"));
-
-                call.enqueue(new Callback<ChampionListDto>() {
-                    @Override
-                    public void onResponse(Call<ChampionListDto> call, Response<ChampionListDto> response) {
-                        if (response.isSuccessful()) {
-                            ChampionListDto champListDto = response.body();
-                            mTestTxt.setText(champListDto.version);
-
-                            //TEST
-                            ChampionsDataSource storedata = new ChampionsDataSource(getApplicationContext());
-                            storedata.openWriteable();
-                            int count = storedata.insertChampionsTransaction(champListDto);
-                            storedata.close();
-                            Snackbar.make(findViewById(android.R.id.content), Integer.toString(count) + " Champions eingelesen", Snackbar.LENGTH_LONG)
-                                    //.setAction("Undo", mOnClickListener)
-                                    //.setActionTextColor(Color.RED)
-                                    .show();
-
-                        } else {
-                            mTestTxt.setText(response.code());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ChampionListDto> call, Throwable t) {
-                        mTestTxt.setText(t.toString());
-                    }
-                });
-
+                new StaticDataChampion(apiValues, latestVersion, this, catchImages, getApplicationContext()).execute();
             } catch (ApiException e) {
                 Toast.makeText(getApplicationContext(), "Internal error", Toast.LENGTH_SHORT).show();
             }
@@ -172,12 +136,19 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
 
     @Override
     public void fetchAndStoreCallback(FetchAndStoreResult result) {
-        Snackbar.make(findViewById(android.R.id.content),
-                Integer.toString(result.getDataCount()) + " Champions eingelesen (" + Integer.toString(result.getImgDateCount()) + " Images)", Snackbar.LENGTH_SHORT)
-                //.setAction("Undo", mOnClickListener)
-                //.setActionTextColor(Color.RED)
-                .show();
-        mTestTxt.setText(result.getVersion());
+        if (result.getVersionResult()) {
+            Snackbar.make(findViewById(android.R.id.content),
+                    "Latest version is " + result.getVersion(), Snackbar.LENGTH_SHORT)
+                    .show();
+            latestVersion = result.getVersion();
+            latestVersionText.setText(latestVersion);
+        }
+        else {
+            Snackbar.make(findViewById(android.R.id.content),
+                    Integer.toString(result.getDataCount()) + " Champions read in (" + Integer.toString(result.getImgDateCount()) + " Images)", Snackbar.LENGTH_SHORT)
+                    .show();
+            localVersionText.setText(result.getVersion());
+        }
     }
 
     private Drawable getRandomWallpaper() {

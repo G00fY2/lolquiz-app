@@ -23,14 +23,12 @@ public abstract class RiotApi extends AsyncTask<FetchAndStoreResult,Void,FetchAn
     protected String apiVersion;
     protected String apiCategory;
 
-    public RiotApi(final Map<String, String> apiValues, final String apiVersion, final String apiCategory) throws ApiException {
+    public RiotApi(final Map<String, String> apiValues) throws ApiException {
         apiKey = apiValues.get("apiKey");
         urlHost = apiValues.get("urlHost");
         urlPath = apiValues.get("urlPath");
         urlQuery = "api_key=" + apiKey;
         setRegion(apiValues.get("region"));
-        this.apiVersion = apiVersion;
-        this.apiCategory = apiCategory;
     }
 
     public URL buildfullUrl (String urlPath, String urlQuery) throws ApiException{

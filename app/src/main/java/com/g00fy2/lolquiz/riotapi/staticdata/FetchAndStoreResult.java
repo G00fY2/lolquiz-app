@@ -11,6 +11,7 @@ public class FetchAndStoreResult {
     private String version;
     private int dataCount;
     private int imgDateCount;
+    private Boolean versionResult;
     private ResponseErrorException responseError;
     private ResponseErrorException imgResponseError;
 
@@ -47,6 +48,14 @@ public class FetchAndStoreResult {
 
     public int getImgDateCount() {
         return imgDateCount;
+    }
+
+    public Boolean getVersionResult() {
+        return versionResult;
+    }
+
+    public void setVersionResult(Boolean versionResult) {
+        this.versionResult = versionResult;
     }
 
     public ResponseErrorException getImgResponseError() {

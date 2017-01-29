@@ -14,7 +14,6 @@ import com.g00fy2.lolquiz.sqlite.ChampionsDataSource;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -23,36 +22,27 @@ import retrofit2.Response;
 
 public class StaticDataChampion extends RiotApi {
 
-    final static String apiVersion = "/v1.2";
-    final static String apiCategory = "/champion";
     private FetchAndStoreCallbackInterface callbackInterface;
     private Context appContext;
     private Boolean catchImages;
+    private String latestVersion;
 
-    public StaticDataChampion(final Map<String, String> apiValues, FetchAndStoreCallbackInterface callbackInterface, Boolean catchImages, Context appContext) throws ApiException {
-        super(apiValues, apiVersion, apiCategory);
+    public StaticDataChampion(final Map<String, String> apiValues, String latestVersion, FetchAndStoreCallbackInterface callbackInterface, Boolean catchImages, Context appContext) throws ApiException {
+        super(apiValues);
         this.appContext = appContext;
         this.catchImages = catchImages;
+        this.latestVersion = latestVersion;
         this.callbackInterface = callbackInterface;
-    }
-
-    public String getChampionDataUrl() throws ApiException {
-        //Class<ChampionListDto> classOf =  ChampionListDto.class;
-        String urlPath = buildStaticDataUrlPath();
-        String urlQuery = getUrlQuery();
-
-        URL newUrl = buildfullUrl(urlPath, urlQuery);
-
-        return newUrl.toString();
     }
 
     // Override AsyncTask method from superclass
     @Override
     protected FetchAndStoreResult doInBackground(FetchAndStoreResult... args) {
         FetchAndStoreResult result = new FetchAndStoreResult();
+        result.setVersionResult(false);
         try {
             RestApi restApi = RetroClient.getRestApi(buildStaticDataBaseUrl());
-            Call<ChampionListDto> call = restApi.getChampionList("true", "stats", apiKey);
+            Call<ChampionListDto> call = restApi.getChampionList(latestVersion, "true", "stats", apiKey);
             Response response = call.execute();
 
             if (response.isSuccessful()) {
@@ -65,7 +55,7 @@ public class StaticDataChampion extends RiotApi {
 
                 // If champions successfully written to db add image url to it
                 if (result.getDataCount() > 0) {
-                    Call<ChampionListDto> imgCall = restApi.getChampionList("true", "image", apiKey);
+                    Call<ChampionListDto> imgCall = restApi.getChampionList(latestVersion, "true", "image", apiKey);
                     Response imgResponse = imgCall.execute();
                     if (imgResponse.isSuccessful()) {
                         ChampionListDto imgChampListDto = (ChampionListDto) imgResponse.body();

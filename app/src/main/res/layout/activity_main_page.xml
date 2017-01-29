@@ -52,22 +52,42 @@
 
         <TextView
             android:id="@+id/textViewMain"
+            android:text="@string/local_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/card_view"
-            android:layout_marginTop="15dp"
-            android:text="Latest Version"/>
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/card_view"/>
 
         <TextView
             android:id="@+id/textViewMain2"
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textViewMain"
-            android:text=""/>
+            android:layout_below="@+id/textViewMain"/>
+
+        <TextView
+            android:id="@+id/textViewMain3"
+            android:text="@string/latest_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/textViewMain2"
+            />
+
+        <TextView
+            android:id="@+id/textViewMain4"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewMain3"/>
 
     </RelativeLayout>
 

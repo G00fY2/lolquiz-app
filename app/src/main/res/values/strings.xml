@@ -1,27 +1,9 @@
 <resources>
-    <string name="app_name">My Quiz Game</string>
+    <string name="app_name">Lol Quiz Game</string>
     <string name="answer">Answer</string>
     <string name="okay">Okay</string>
-    <string name="next">Next</string>
-    <string name="hint">Hint</string>
     <string name="refresh">Refresh</string>
     <string name="settings">Settings</string>
-    <string-array name="Questions">
-        <item>What is the Ultimate ability LeBlanc?</item>
-        <item>What is the Ultimate ability Rengar?</item>
-        <item>What is the Ultimate ability Shen?</item>
-    </string-array>
-    <string-array name="Answers">
-        <item>Mimic</item>
-        <item>Thrill of the Hunt</item>
-        <item>Stand United</item>
-    </string-array>
-    <string-array name="Hints">
-        <item>Mimic</item>
-        <item>Thrill of the Hunt</item>
-        <item>Stand United</item>
-    </string-array>
-
     <string name="settings_toolbar_label">Settings</string>
     <string name="main_frame_test">LOL\nQuiz</string>
     <string name="start_quiz">Start Quiz</string>
@@ -34,4 +16,6 @@
     <string name="EndGameDialog">Do you really want to end the game?</string>
     <string name="EndGameDialogButton">End quiz</string>
     <string name="DialogCancel">Cancel</string>
+    <string name="local_version">Local version</string>
+    <string name="latest_version">Latest version</string>
 </resources>
