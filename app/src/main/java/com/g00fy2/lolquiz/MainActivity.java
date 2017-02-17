@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,9 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
     private String latestVersion;
     TextView localVersionText;
     TextView latestVersionText;
+    ProgressBar fetchingBar;
     ImageView imageView;
+    Boolean fetchingData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +52,11 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
         setSupportActionBar(toolbar);
 
         //imageView = (ImageView) findViewById(R.id.randomStartImg);
-        //setRandomMainWallpaper();
+        //setRandomMainWallpaper()
 
         localVersionText = (TextView) findViewById(R.id.textViewMain2);
         latestVersionText = (TextView) findViewById(R.id.textViewMain4);
+        fetchingBar = (ProgressBar) findViewById(R.id.progressBar);
 
         apiValues.put("urlHost", ".api.pvp.net");
         apiValues.put("urlPath", "/api/lol/");
@@ -90,9 +94,13 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
     }
 
     public void onStartQuizClick(View view) {
-        Intent intent = new Intent(this, QuestionsActivity.class);
-        startActivity(intent);
-        //finish();
+        if (!fetchingData) {
+            Intent intent = new Intent(this, QuestionsActivity.class);
+            startActivity(intent);
+            //finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "Waiting for data beeing loaded.", Toast.LENGTH_SHORT).show();
+        }
     }
     private void getLatestVersion() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -115,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
     }
 
     private void getLatestData() {
+        fetchingData = true;
+        fetchingBar.setVisibility(View.VISIBLE);
+
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
@@ -144,6 +155,9 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
             latestVersionText.setText(latestVersion);
         }
         else {
+            fetchingBar.setVisibility(View.GONE);
+            fetchingData = false;
+
             Snackbar.make(findViewById(android.R.id.content),
                     Integer.toString(result.getDataCount()) + " Champions read in (" + Integer.toString(result.getImgDateCount()) + " Images)", Snackbar.LENGTH_SHORT)
                     .show();
