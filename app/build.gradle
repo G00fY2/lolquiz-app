@@ -43,6 +43,9 @@ dependencies {
     // timber
     compile 'com.jakewharton.timber:timber:4.5.1'
 
+    // ui
+    compile 'konifar:fab-transformation:1.0.0'
+
     // android support libs
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'

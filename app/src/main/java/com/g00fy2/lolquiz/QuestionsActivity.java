@@ -83,10 +83,10 @@ public class QuestionsActivity extends AppCompatActivity {
 
         // getting the runtime IDs from the views
         getViewIDs();
-        // create blinking animation
+        // create blinking simple_grow
         setBlinkAnimation();
 
-        // sets up the handler and animation for the countdown
+        // sets up the handler and simple_grow for the countdown
         initCountdown(10000, 500);
 
         // call new round function to set up question and answers
@@ -136,7 +136,7 @@ public class QuestionsActivity extends AppCompatActivity {
             else {
                 getSupportActionBar().setTitle("Round " + Integer.toString(quizRound));
 
-                //animation for round progressbar (1-10) multiplied by 1000 for smoother animation
+                //simple_grow for round progressbar (1-10) multiplied by 1000 for smoother simple_grow
                 ProgressBarAnimation anim = new ProgressBarAnimation(roundProgress, (quizRound - 1) * 1000, quizRound * 1000);
                 anim.setDuration(500);
                 roundProgress.startAnimation(anim);
@@ -210,7 +210,7 @@ public class QuestionsActivity extends AppCompatActivity {
     // creates the countdownBar Animation and countdown Handler and Runnable
     // periot in milliseconds, intervall time the Runnable gets called
     private void initCountdown(final int period, final int interval) {
-        // creates countdown progressbar animation with duration
+        // creates countdown progressbar simple_grow with duration
         countdownAnimation = new ProgressBarAnimation(countdownBar, 10000, 0);
         countdownAnimation.setDuration(period);
 

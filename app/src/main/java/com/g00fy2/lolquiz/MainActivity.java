@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ import com.g00fy2.lolquiz.riotapi.FetchAndStoreCallbackInterface;
 import com.g00fy2.lolquiz.riotapi.StaticDataChampion;
 import com.g00fy2.lolquiz.riotapi.StaticDataVersion;
 import com.g00fy2.lolquiz.riotapi.staticdata.FetchAndStoreResult;
+import com.konifar.fab_transformation.FabTransformation;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -30,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements FetchAndStoreCallbackInterface {
 
@@ -40,11 +46,35 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
     ProgressBar fetchingBar;
     ImageView imageView;
     Boolean fetchingData;
+    View sheet;
+    View overlay;
+    FloatingActionButton fab;
+
+    public void onClickFab(View view) {
+        if (fab.getVisibility() == View.VISIBLE) {
+            FabTransformation.with(fab).setOverlay(overlay).transformTo(sheet);
+        }
+        Timber.d("clicked");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (fab.getVisibility() != View.VISIBLE) {
+            FabTransformation.with(fab).setOverlay(overlay).transformFrom(sheet);
+            return;
+        }
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main_page);
+
+        Animation anim = AnimationUtils.loadAnimation(this, R.anim.simple_grow);
+        //fab.startAnimation(anim);
+
 
         // Find the toolbar view inside the activity layout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -57,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
         localVersionText = (TextView) findViewById(R.id.textViewMain2);
         latestVersionText = (TextView) findViewById(R.id.textViewMain4);
         fetchingBar = (ProgressBar) findViewById(R.id.progressBar);
+        sheet = findViewById(R.id.sheet);
+        overlay = findViewById(R.id.overlay);
+        fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+
 
         apiValues.put("urlHost", ".api.pvp.net");
         apiValues.put("urlPath", "/api/lol/");
