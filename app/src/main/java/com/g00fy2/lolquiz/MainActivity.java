@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements FetchAndStoreCall
         apiValues.put("urlHost", ".api.pvp.net");
         apiValues.put("urlPath", "/api/lol/");
         //TODO: Nicht ins REPO!
-        apiValues.put("apiKey", "ENTER API KEY HERE");
+        apiValues.put("apiKey", BuildConfig.RIOT_API_KEY);
         apiValues.put("region", "euw");
 
         getLatestVersion();
